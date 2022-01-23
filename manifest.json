@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "A Browser Add-On To Support Password Spring Cleaning",
+    "version": "1.0",
+    "description": "A web based browser extension that supports users through the process of spring cleaning their accounts and passwords.",
+    "background": {
+      },
+      "permissions": ["identity"],
+      "action": {
+        "default_title": "An add-on to help spring clean your passwords",
+        "default_popup": "popup.html"
+      }
+}
