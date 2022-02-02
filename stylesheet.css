@@ -1,0 +1,49 @@
+body {
+    height: 340px;
+    width: 450px;
+    margin: 0px;
+    overflow-y: scroll;
+}
+
+.nav {
+    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.nav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 10px 15px;
+}
+
+#nav1, #nav2 {
+   width: 33%; 
+}
+
+.nav a:hover {
+    background: #f1f1f1;
+    color: black;
+}
+
+.container {
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 40px;
+}
+
+.item-container {
+    background-color: rgb(145, 143, 143);
+    width: 100%;
+    margin: 2px; 
+    padding: 3px;
+    display: inline-block;
+}
+
+#domain {
+    margin-left: 15px;
+}
+
