@@ -1,0 +1,4 @@
+fix searching history to ignore duplicates
+    search more items in the history
+save user searches to a database - IndexedDB
+group results in terms of frequency i.e. over a month ago, last week...
