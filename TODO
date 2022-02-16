@@ -1,4 +1,21 @@
 fix searching history to ignore duplicates
     search more items in the history
+    
 save user searches to a database - IndexedDB
+    save history items to the database when user quits chrome 
+
 group results in terms of frequency i.e. over a month ago, last week...
+group results in terms of how likely the user would have an account with it - Could make use of the totalVisits method from the chrome.history API (shows how many times a particular 
+page has been visited - the more times the more likely the user has an account)
+
+
+set up background worker in case the user has no internet, the add-on still operates   
+
+chrome.browsingData to automatically remove indexedDB store every os often
+chrome.topSites shows most visited sites in the new tab page
+
+change styles of buttons 
+create icons for extension 
+
+
+
