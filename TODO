@@ -17,5 +17,14 @@ chrome.topSites shows most visited sites in the new tab page
 change styles of buttons 
 create icons for extension 
 
+add popup when extension is first installed - set in database if the app has been visited before
+
+change check for login page logic - only checks if the first instance of a url is a login page, not all other instances 
+
+set up database to add deleted accounts from extension 
+change style for buttons - add visual feedback
+could add warning message before deleting an account from the extension
+
+if there is no more history - add placeholder message 
 
 
