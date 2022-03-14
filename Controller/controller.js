@@ -28,6 +28,7 @@ function runExtension() {
 function updateSettings(bool) {
     const IDBrequest = indexedDB.open("historyItems", 1)
     IDBrequest.onsuccess = function(event) {
+        db = IDBrequest.result
         var transaction = db.transaction(["extension_settings"], "readwrite")
         transaction.oncomplete = function(event) {
             console.log("[IDB] Transaction Complete")
