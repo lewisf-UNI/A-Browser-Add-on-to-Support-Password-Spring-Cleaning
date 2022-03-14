@@ -1,63 +1,78 @@
 var db = null; 
+const IDBrequest = indexedDB.open("historyItems", 1)
 
-function viewDB() {
-
-    // checks to see if database exists before making a connection
-    // TODO - there may be a problem with creating the database after which could throw an error, check after creating db if it exists 
-    if(!db) {
-        createDB()
+IDBrequest.onupgradeneeded = function(event) {
+    db = IDBrequest.result
+    db.createObjectStore("blacklist", {keyPath: "domain"})
+    db.createObjectStore("extension_settings", {keyPath: "id"})
+}
+IDBrequest.onsuccess = function(event) {
+    db = IDBrequest.result
+    var transaction = db.transaction(["extension_settings"], "readwrite")
+    transaction.oncomplete = function(event) {
+        console.log("[IDB] Transaction Complete")
     }
-    const tx = db.transaction("history_items", "readonly")
-    const hItems = tx.objectStore("history_items")
-    const request = hItems.openCursor()
-
-    request.onsuccess = function(e) {
-        const cursor = e.target.result
-
-                // take item from the db and put it into an array
-                if (cursor) {
-                    alert(`Title: ${cursor.key} Text: ${cursor.value.text} `)
-                    //do something with the cursor
-                    cursor.continue()
-                }
+    transaction.onerror = function(event) {
+        console.log("[IDB] error")
     }
 
-    request.onerror = function(e) {
-        console.log(`somethings wrong: ${e.target.error}`)
+    var objectStore = transaction.objectStore("extension_settings")
+    var objectStoreRequest = objectStore.getAll()
+    objectStoreRequest.onsuccess = function(event) {
+        var data = objectStoreRequest.result
+        if(data[0].consent === "true") {
+            console.log("CONSENT GIVEN")
+            runExtension()
+        } else {
+            console.log("CONSENT NOT GIVEN")
+        }
+        console.log("[IDB] Request Successful")  //TODO - Change error message to something more meaningful
+    }
+}
+IDBrequest.onerror = function(event) {
+    console.log("somethings wrong") //TODO - Change error message to something more meaningful
+}
+
+function getData() {
+    if(db === null) {
+        console.log("somethings wrong") //TODO - Change error message to something more meaningful
+    } else {
+        return new Promise((resolve, reject) => {
+            var transaction = db.transaction(["blacklist"], "readonly")
+
+            transaction.oncomplete = function(event) {
+                console.log("[IDB] Transaction Complete")
+            }
+            transaction.onerror = function(event) {
+                reject("[IDB] error: somethings wrong") //TODO - Change error message to something more meaningful
+            }
+
+            var objectStore = transaction.objectStore("blacklist")
+            var getAllRequest = objectStore.getAll()
+            
+            getAllRequest.onsuccess = function(event) {
+                console.log("[IDB] Data Request Complete")
+                resolve(getAllRequest.result)
+            }
+            getAllRequest.onerror = function(event) {
+                reject("[IDB] error: somethings wrong") //TODO - Change error message to something more meaningful
+            }
+        })
     }
 }
 
-// data may be an array of objects so will need to add a forEach when adding items to the database
-// also check if data is empty
-function addToDB(data) {
-    if(!db) {
-        createDB()
+function addData(data) {
+    var transaction = db.transaction(["blacklist"], "readwrite")
+    transaction.oncomplete = function(event){
+        console.log("Transaction completed")  //TODO - Change error message to something more meaningful
     }
-    const tx = db.transaction("history_items", "readandwrite")
-    tx.onerror = function(e) {
-        console.log(`somethings wrong: ${e.trarget.error}`)
-    }
-    const hItems = tx.objectStore("history_items")
-    hItems.add(data)
-}
-
-
-function createDB() {
-
-    const request = indexedDB.open("historyItems", 1)
-
-    request.onupgradeneeded = function(e){
-        db = e.target.result
-        const hItems = db.createObjectStore("history_items", {keyPath: "domain"})
-        console.log(`upgrade is called database name: ${db.name} version: ${db.version}`)
+    transaction.onerror = function(event){
+        console.log("somethings wrong") //TODO - Change error message to something more meaningful
     }
 
-    request.onsuccess = function(e){
-        db = e.target.result
-        console.log(`success is called database name: ${db.name} version: ${db.version}`)
-    }
-
-    request.onerror = function(e){
-        console.log(`somethings wrong: ${e.target.error}`)
+    var objectStore = transaction.objectStore("blacklist")
+    var objectStoreRequest = objectStore.add(data)
+    objectStoreRequest.onsuccess = function(event) {
+        console.log("Request successful")  //TODO - Change error message to something more meaningful
     }
 }
