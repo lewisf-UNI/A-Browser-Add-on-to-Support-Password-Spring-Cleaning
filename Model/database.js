@@ -65,7 +65,7 @@ function getData() {
 function addData(data) {
     var transaction = db.transaction(["blacklist"], "readwrite")
     transaction.oncomplete = function(event){
-        console.log("[IDB] Transaction Complete: Data added successfully")  //TODO - Change error message to something more meaningful
+        console.log("[IDB] Transaction Complete: Data added successfully")  
     }
     transaction.onerror = function(event){
         console.log(`[IDB] ${event.target.error}`) 
@@ -74,7 +74,7 @@ function addData(data) {
     var objectStore = transaction.objectStore("blacklist")
     var objectStoreRequest = objectStore.add(data)
     objectStoreRequest.onsuccess = function(event) {
-        console.log("[IDB] Request Successful: Adding data to DB")  //TODO - Change error message to something more meaningful
+        console.log("[IDB] Request Successful: Adding data to DB")  
     }
 }
 
