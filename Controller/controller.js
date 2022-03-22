@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function runExtension() {
     // use the chrome.history API to search the users history and return HistoryItems     
-    chrome.history.search({text: '', maxResults: 0, startTime: 0}, function(data) { // BUG WITH chrome.history NOT RETURNING ALL RESULTS, ADDED A startTime AND THIS SEEMED TO FIX ISSUE
+    chrome.history.search({text: '', maxResults: 0, startTime: 0}, function(data) { 
         sortHistory(data)
     })
 }
@@ -31,7 +31,7 @@ function updateSettings(bool) {
         db = IDBrequest.result
         var transaction = db.transaction(["extension_settings"], "readwrite")
         transaction.oncomplete = function(event) {
-            console.log("[IDB] Transaction Complete")
+            console.log("[IDB] Transaction Complete: Settings updated succesfully")
         }
         transaction.onerror = function(event) {
             console.log(`[IDB] ${event.target.error}`)
@@ -47,11 +47,14 @@ function updateSettings(bool) {
                     updateData.consent = bool
                     const UpdateRequest = cursor.update(updateData)
                     UpdateRequest.onsuccess = function() {
-                        console.log("[IDB] Settings Updated")
+                        console.log("[IDB] Request Complete: Updating settings")
                     } 
                 }
                 cursor.continue()
             }
         }
+    }
+    IDBrequest.onerror = function(event) {
+        console.log(`[IDB] ${event.target.error}`)
     }
 }

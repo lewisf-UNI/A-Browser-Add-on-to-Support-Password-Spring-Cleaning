@@ -2,8 +2,6 @@
 
 // runs when extension is first installed
 chrome.runtime.onInstalled.addListener(() => {
-    
-    // TODO should check to see if browser supports indexeddb first to prevent errors
     createDB()
 })
 
@@ -11,29 +9,29 @@ function createDB() {
 
     const request = indexedDB.open("historyItems", 1)
 
-    request.onupgradeneeded = function(e){
-        db = e.target.result
+    request.onupgradeneeded = function(event){
+        db = event.target.result
         db.createObjectStore("blacklist", {keyPath: "domain"})
         db.createObjectStore("extension_settings", {keyPath: "id"})
         console.log(`upgrade is called database name: ${db.name} version: ${db.version}`)
     }
 
-    request.onsuccess = function(e){
-        db = e.target.result
+    request.onsuccess = function(event){
+        db = event.target.result
         var time = new Date()
         console.log(`success is called database name: ${db.name} version: ${db.version} time: ${time.toUTCString()}`)
         initSettings(db)
     }
 
-    request.onerror = function(e){
-        console.log(`error: ${e.target.error}`)
+    request.onerror = function(event){
+        console.log(`[IDB] ${event.target.error}`)
     }
 }
 
 function initSettings(db) {
     var transaction = db.transaction(["extension_settings"], "readwrite")
     transaction.oncomplete = function(event) {
-        console.log("[IDB] Transaction Complete")
+        console.log("[IDB] Transaction Complete: Settings initialised")
     }
     transaction.onerror = function(event) {
         console.log(`[IDB] ${event.target.error}`)
@@ -42,6 +40,6 @@ function initSettings(db) {
     var objectStore = transaction.objectStore("extension_settings")
     var objectStoreRequest = objectStore.add({ id: "1", consent: "true"})
     objectStoreRequest.onsuccess = function(event) {
-        console.log("[IDB] Request Successful")  //TODO - Change error message to something more meaningful
+        console.log("[IDB] Request Successful: Initalising settings") 
     }
 }
