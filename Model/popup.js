@@ -118,6 +118,7 @@ function addRecentLogins(recentLogins) {
 
             const btn = document.createElement('button')
             btn.className = "btn"
+            btn.title = "Go to Site"
             btn.appendChild(document.createTextNode("-->"))
             btn.addEventListener("click", function() {
                 window.open(`http://${page.domain}`)
@@ -126,6 +127,7 @@ function addRecentLogins(recentLogins) {
 
             const btn2 = document.createElement('button')
             btn2.className = "btn"
+            btn2.title = "Delete from Extension"
             btn2.appendChild(document.createTextNode("X"))
             btn2.addEventListener("click", function(e) {
                 e.preventDefault()
@@ -182,6 +184,7 @@ function addHistoryToExtension(results) {
 
             const btn = document.createElement('button')
             btn.className = "btn"
+            btn.title = "Go to Site"
             btn.appendChild(document.createTextNode("-->"))
             btn.addEventListener("click", function() {
                 window.open(`http://${page.domain}`)
@@ -190,6 +193,7 @@ function addHistoryToExtension(results) {
 
             const btn2 = document.createElement('button')
             btn2.className = "btn"
+            btn2.title = "Delete from Extension"
             btn2.appendChild(document.createTextNode("X"))
             btn2.addEventListener("click", function(e) {
                 e.preventDefault()
