@@ -8,11 +8,12 @@ function sortHistory(data) {
 
     // let ts = [{}]
 
-    if(!Array.isArray(data) || !data.length) {
-        console.log("no history objects exist")
+    if(!Array.isArray(data) || !data.length) {1
+        console.log("no history objects exist") // do something here
         return true 
     } else {
 
+        var rlDomains = [] 
         data.forEach(function(page) {
 
             let domain = (new URL(`${page.url}`))
@@ -26,13 +27,13 @@ function sortHistory(data) {
             //     domains.push(domain.hostname)
             // }
 
-            if(checkForLoginPage(page) && !domains.includes(domain.hostname)) {
+            if(checkForLoginPage(page) && !rlDomains.includes(domain.hostname)) {
                 recentLogins.push({
                     domain: `${domain.hostname}`,
                     last_visit: `${page.lastVisitTime}`,
                     visit_count: `${page.visitCount}`
                 })
-                domains.push(domain.hostname)
+                rlDomains.push(domain.hostname)
             } else if(!domains.includes(domain.hostname)) {
                 pages.push({
                     domain: `${domain.hostname}`,
@@ -57,13 +58,13 @@ function sortHistory(data) {
             
             for(i = 0; i < recentLogins.length; i++) {
                 if(!isEmpty(recentLogins[i])) {
-                    if(!TEMP.includes(recentLogins[i].domain)) {
+                    if(!TEMP.includes(recentLogins[i].domain) && recentLogins[i].domain) {
                         TEMP_RESULTS.push(recentLogins[i])
                     }
                 }
             }
 
-            TEMP_RESULTS = TEMP_RESULTS.filter(value => Object.keys(value).length !== 0)
+            TEMP_RESULTS = TEMP_RESULTS.filter(value => !isEmpty(value))
             if(TEMP_RESULTS.length) {
                 addRecentLogins(TEMP_RESULTS)
             }
@@ -71,12 +72,12 @@ function sortHistory(data) {
             TEMP_RESULTS = [{}]
             for(i = 0; i < pages.length; i++) {
                 if(!isEmpty(pages[i])) {
-                    if(!TEMP.includes(pages[i].domain)) {
+                    if(!TEMP.includes(pages[i].domain) && pages[i].domain) {
                         TEMP_RESULTS.push(pages[i])
                     }
                 }
             }
-            pages = TEMP_RESULTS.filter(value => Object.keys(value).length !== 0)
+            pages = TEMP_RESULTS.filter(value => !isEmpty(value))
             if(pages.length) {
                 let RESULTS = pages.slice(0, no_of_results)
                 addHistoryToExtension(RESULTS) 
