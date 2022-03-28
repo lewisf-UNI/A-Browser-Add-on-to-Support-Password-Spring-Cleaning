@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
          * @description - Displays an alert to the user with a message about consent. 
          */
         if(window.confirm("If you want the extension to stop tracking your data, press 'Cancel'. Otherwise press 'Ok'!")) {
+
+            // makes a call to the updateSettings function below. 
             updateSettings("true")
         } else {
             updateSettings("false")
@@ -53,12 +55,16 @@ function runExtension() {
 
 /**
  * 
- * @param {boolean} bool - Boolean that indicates user consent. 
+ * @param {boolean} bool - Boolean that indicates user consent. 'True' = Consent is Given, 'False' = Consent is denied. 
  * @description - Updates the user consent status in the extension_settings object store in the IndexedDB database. 
  */
 function updateSettings(bool) {
+
+    // makes a request to open the database with the name and version number specified 
     const IDBrequest = indexedDB.open("historyItems", 1)
+
     IDBrequest.onsuccess = function(event) {
+
         db = IDBrequest.result
         var transaction = db.transaction(["extension_settings"], "readwrite")
         transaction.oncomplete = function(event) {
@@ -69,18 +75,22 @@ function updateSettings(bool) {
         }
 
         var objectStore = transaction.objectStore("extension_settings")
+        // opens a cursor on the object store which is a way of going through data one entry at a time in an object store
         objectStore.openCursor().onsuccess = function(event) {
             const cursor = event.target.result
             if(cursor) {
+                // since the object store should only ever have on entry and that entry should have the same ID every time,
+                // look for the ID and that should be the entry we are looking for
                 if(cursor.value.id === '1') {
+                    // updates the data in the consent field in the database with the paramater that has been passed to the function.
                     const updateData = cursor.value
-
                     updateData.consent = bool
                     const UpdateRequest = cursor.update(updateData)
                     UpdateRequest.onsuccess = function() {
                         console.log("[IDB] Request Complete: Updating settings")
                     } 
                 }
+                // moves onto the next entry. Since there is only one in the object store at all times this effectively breaks the if statement.
                 cursor.continue()
             }
         }

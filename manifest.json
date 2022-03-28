@@ -6,7 +6,7 @@
     "background": {
       "service_worker": "Controller/background.js"
     },
-    "permissions": ["history", "topSites"],
+    "permissions": ["history"],
     "action": {
       "default_title": "An add-on to help spring clean your passwords",
       "default_popup": "View/popup.html"
