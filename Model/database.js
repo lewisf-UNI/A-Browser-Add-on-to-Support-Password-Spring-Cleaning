@@ -35,7 +35,10 @@ IDBrequest.onsuccess = function(event) {
         // if it is true then the extension can be run. 
         } else if(data[0].consent === "true") {
             runExtension()
-        } 
+        } else if(data[0].consent === "false") {
+            // if consent is not given, clear all data connected to the user from the IndexedDB database.
+            clearData()
+        }
         console.log("[IDB] Request Successful: Checking consent")  
     }
 }
@@ -126,5 +129,27 @@ function initSettings(db, callback) {
         if(callback) {
             callback()
         }
+    }
+}
+
+/**
+ * 
+ * @description - Clears all data collected from the user from the IndexedDB database. This is to comply with my ethics application. 
+ */
+function clearData() {   
+    var transaction = db.transaction(["blacklist"], "readwrite")
+
+    transaction.oncomplete = function() {
+        console.log("[IDB] Data Cleared from IndexedDB")
+    }
+    transaction.onerror = function(event) {
+        console.log(`[IDB] ${event.target.error}`)
+    }
+
+    var objectStore = transaction.objectStore("blacklist")
+    // clear function removes all entries in a specified object store. 
+    var clearObjectStoreRequest = objectStore.clear()
+    clearObjectStoreRequest.onsuccess = function() {
+        console.log("[IDB] Clearing User Data from the IndexedDB database")
     }
 }

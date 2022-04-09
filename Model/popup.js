@@ -22,7 +22,6 @@ function sortHistory(data) {
     // checks to see if the users history is empty and if so, returns the function. 
     if(!Array.isArray(data) || !data.length) {
 
-        // TODO - add message that displays when there is no history to display
         console.log("Error: no history objects exist")
         return true 
 
