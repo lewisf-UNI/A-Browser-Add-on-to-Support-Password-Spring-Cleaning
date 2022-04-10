@@ -4,7 +4,7 @@ A web based browser extension that supports users through the process of spring 
 
 This was undertaken as my 4th Year Project. 
 
-The IDE used to run this project was Visual Studio Code therefore this IDE is recommended when the running the code.
+The IDE used to run this project was Visual Studio Code therefore this IDE is recommended when running the code.
 
 To do this follow these steps: 
 
